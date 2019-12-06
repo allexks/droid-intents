@@ -11,7 +11,7 @@ import android.widget.TextView
 class SecondActivity : AppCompatActivity() {
 
     companion object {
-        val EXTRA_REPLY = "com.example.android.twoactivities.extra.REPLY"
+        const val EXTRA_REPLY = "com.example.android.twoactivities.extra.REPLY"
     }
 
     private lateinit var mReply: EditText

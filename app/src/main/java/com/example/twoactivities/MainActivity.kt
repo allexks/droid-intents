@@ -14,9 +14,12 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val LOG_TAG = MainActivity::class.java.simpleName
-        val EXTRA_MESSAGE = "com.example.android.twoactivities.extra.MESSAGE"
-        val TEXT_REQUEST = 1
+        const val EXTRA_MESSAGE = "com.example.android.twoactivities.extra.MESSAGE"
+        const val TEXT_REQUEST = 1
+        const val REPLY_VISIBLE_KEY = "reply_visible"
+        const val REPLY_TEXT_KEY = "reply_text"
     }
+
 
     private lateinit var mMessageEditText: EditText
     private lateinit var mReplyHeadTextView: TextView
@@ -26,9 +29,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         mMessageEditText = findViewById(R.id.editText_main)
         mReplyHeadTextView = findViewById(R.id.text_header_reply)
         mReplyTextView = findViewById(R.id.text_message_reply)
+
+        savedInstanceState?.let { bundle ->
+            val isVisible = bundle.getBoolean(REPLY_VISIBLE_KEY)
+            if (isVisible) {
+                mReplyHeadTextView.visibility = View.VISIBLE
+                mReplyTextView.visibility = View.VISIBLE
+                mReplyTextView.text = bundle.getString(REPLY_TEXT_KEY)
+            }
+        }
     }
 
     fun launchSecondActivity(view: View) {
@@ -52,5 +65,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(REPLY_VISIBLE_KEY, mReplyHeadTextView.visibility == View.VISIBLE)
+        outState.putString(REPLY_TEXT_KEY, mReplyTextView.text.toString())
     }
 }
